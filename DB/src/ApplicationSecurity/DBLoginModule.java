@@ -4,6 +4,7 @@
  */
 package ApplicationSecurity;
 
+import static ApplicationSecurity.Driver.db;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,19 +34,24 @@ public class DBLoginModule implements LoginModule{
     private CallbackHandler callbackHandler = null;
     private boolean authenticationSuccess=false;
     Subject subject;
+    public static String loginName,loginID,loginPW,loginUN;
     public void initUsers(){
         File f = new File(System.getProperty("user.dir")+"\\src\\db\\"+"users.txt");
         Scanner scan=null;
         try {
             scan= new Scanner(f);
-            scan.useDelimiter(",");
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DBLoginModule.class.getName()).log(Level.SEVERE, null, ex);
         }
         if(scan != null){
             while(scan.hasNext()){
-                usernames.add(scan.next());
-                passwords.add(scan.next());
+                
+                String s=scan.nextLine();
+                Scanner uScan = new Scanner(s).useDelimiter(",");
+                usernames.add(uScan.next());
+                passwords.add(uScan.next());
+               
             }
             
         }
@@ -56,7 +62,6 @@ public class DBLoginModule implements LoginModule{
         subject = sbjct;
         callbackHandler = ch;
         initUsers();
-        
     }
 
     @Override
@@ -75,28 +80,29 @@ public class DBLoginModule implements LoginModule{
         }
         
         String name = ((NameCallback)callbackArray[0]).getName();
+        
         String password = new String(((PasswordCallback)callbackArray[1]).getPassword());
         for(int i=0;i<usernames.size();i++){
+            
             if(name.equals(usernames.get(i))&&password.equals(passwords.get(i))){
+                loginName = AccountManager.getName(name);
+                loginID = AccountManager.getID(name);
+                loginUN = name;
+                loginPW = password;
                 authenticationSuccess =true;
+                
             }
         }
         if(!authenticationSuccess){
-             System.out.println("Username/Password Invalid");
+            System.out.println("Username/Password Invalid");
         }
-       /* if(name.equals(TEST_USERNAME) && password.endsWith(TEST_PASSWORD)){
-            System.out.println("Login Successful");
-            authenticationSuccess =true;
-        }else{
-            authenticationSuccess =false;
-            throw new FailedLoginException("Login Unsuccessful");
-        }*/
+        
         return authenticationSuccess;
     }
 
     @Override
     public boolean commit() throws LoginException {
-        return true;
+        return authenticationSuccess;
     }
 
     @Override

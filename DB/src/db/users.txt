@@ -1,1 +1,3 @@
-root,toor
+root,toor,Admin,(0000)
+mmary,password,Mary,(4104)
+supahusah,password1,tim,(4012)

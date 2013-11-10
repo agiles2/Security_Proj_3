@@ -19,11 +19,11 @@ public class Record {
     public Record(String recordLine){
         Scanner scan = new Scanner(recordLine);
         scan.useDelimiter(",");
-        name = scan.next();
-        ID = scan.next();
-        position = scan.next();
-        supervisor = scan.next();
-        salary = scan.next();
+        name = scan.next().trim();
+        ID = scan.next().trim();
+        position = scan.next().trim();
+        supervisor = scan.next().trim();
+        salary = scan.next().trim();
     }
 
     /**

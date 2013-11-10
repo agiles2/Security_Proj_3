@@ -29,12 +29,12 @@ public class DBCallbackHandler implements CallbackHandler {
             if (callbackArray[counter] instanceof NameCallback) {
                 nameCallback = (NameCallback)callbackArray[counter];
                 counter++;
-                System.out.println(nameCallback.getPrompt());
+                System.out.print(nameCallback.getPrompt());
                 nameCallback.setName(new Scanner(System.in).next());
             } else if (callbackArray[counter] instanceof PasswordCallback) {
                 passwordCallback = (PasswordCallback)callbackArray[counter];
                 counter++;
-                System.out.println(passwordCallback.getPrompt());
+                System.out.print(passwordCallback.getPrompt());
                 passwordCallback.setPassword(new Scanner(System.in).next().toCharArray());
             }
         }
